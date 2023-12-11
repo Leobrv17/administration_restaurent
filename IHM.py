@@ -1,10 +1,11 @@
 from datetime import datetime
-
 import asking
 from customer import CustomerManager
 from order import OrderManager
 from dish import DishManager
 
+def print_invalid_choice():
+    print("Choix invalide. Veuillez entrer un numéro valide.")
 
 def overview():
     print("Bienvenu dans votre menu pour gestion de commandes de votre restaurent")
@@ -13,16 +14,11 @@ def overview():
     manager_dish = DishManager()
     manager_dish.load_from_file()
     manager_order = OrderManager()
-    manager_order.load_from_file(manager_cust,manager_dish)
-    while True:
-        print("Quelle action souhaitez-vous réaliser ?")
-        print("1. Gestion clientèle")
-        print("2. Gestion de la carte")
-        print("3. Gestion des commandes")
-        print("4. Récupération des bilans quotidiens")
-        print("5. Plus d'informations")
-        print("6. Quitter")
+    manager_order.load_from_file(manager_cust, manager_dish)
 
+    while True:
+        print("\nQuelle action souhaitez-vous réaliser ?")
+        print("1. Gestion clientèle\n2. Gestion de la carte\n3. Gestion des commandes\n4. Quitter")
         choix = input("Entrez le numéro de votre choix -> ")
 
         if choix == '1':
@@ -32,114 +28,62 @@ def overview():
         elif choix == '3':
             menu_bill(manager_cust, manager_dish, manager_order)
         elif choix == '4':
-            print("Option 'Plus d'informations' vous permet d'en savoir plus sur les fonctionnalités.")
-        elif choix == '5':
             print("À demain.")
             break
         else:
-            print("Choix invalide. Veuillez entrer un numéro valide.")
-
+            print_invalid_choice()
 
 def menu_customer(manager):
     while True:
-        print("Overview -> Gestion Clientèle")
-        print("Quelle action souhaitez-vous réaliser ?")
-        print("1. Créer un nouveau client")
-        print("2. Supprimer un client existant")
-        print("3. Modifier un client existant")
-        print("4. Afficher un client existant")
-        print("5. Plus d'informations")
-        print("6. Quitter")
-
+        print("\nOverview -> Gestion Clientèle\nQuelle action souhaitez-vous réaliser ?")
+        print("1. Créer un nouveau client\n2. Supprimer un client existant\n3. Modifier un client existant\n4. Afficher un client existant\n5. Quitter")
         choix = input("Entrez le numéro de votre choix -> ")
 
         if choix == '1':
             manager.request_new_customer()
-            pass
         elif choix == '2':
             manager.request_and_delete_customer()
-            pass
         elif choix == '3':
             manager.request_and_update_customer()
-            pass
         elif choix == '4':
             manager.request_and_show_customer()
-            pass
         elif choix == '5':
-            print(
-                "Option 'Plus d'informations' vous permet d'en savoir plus sur les fonctionnalités de gestion clientèle.")
-        elif choix == '6':
-            print("Retour à l'overview")
             break
         else:
-            print("Choix invalide. Veuillez entrer un numéro valide.")
-
+            print_invalid_choice()
 
 def menu_dish(manager_dish):
     while True:
-        print("Overview -> Gestion de la carte")
-        print("Quelle action souhaitez-vous réaliser ?")
-        print("1. Créer un nouveau plat")
-        print("2. Supprimer un plat existant")
-        print("3. Modifier un plat existant")
-        print("4. Afficher un plat existant")
-        print("5. Plus d'informations")
-        print("6. Quitter")
-
+        print("\nOverview -> Gestion de la carte\nQuelle action souhaitez-vous réaliser ?")
+        print("1. Créer un nouveau plat\n2. Supprimer un plat existant\n3. Modifier un plat existant\n4. Afficher un plat existant\n5. Quitter")
         choix = input("Entrez le numéro de votre choix -> ")
 
         if choix == '1':
             manager_dish.request_new_dish()
-            pass
         elif choix == '2':
             manager_dish.request_and_delete_dish()
-            pass
         elif choix == '3':
             manager_dish.request_and_update_dish()
-            pass
         elif choix == '4':
             manager_dish.request_and_show_dish()
-            pass
         elif choix == '5':
-            print(
-                "Option 'Plus d'informations' vous permet d'en savoir plus sur les fonctionnalités de gestion de la carte.")
-        elif choix == '6':
-            print("Retour à l'overview")
             break
         else:
-            print("Choix invalide. Veuillez entrer un numéro valide.")
-
+            print_invalid_choice()
 
 def menu_bill(manager_customer, manager_dish, manager_order):
     while True:
-        print("Overview -> Gestion des commandes")
-        print("Quelle action souhaitez-vous réaliser ?")
-        print("1. Créer une nouvelle commande")
-        print("2. Afficher les commande d'un client")
-        print("3. Afficher un facture")
-        print("4. Telecharger csv pour un date")
-        print("5. Plus d'informations")
-        print("6. Quitter")
-
+        print("\nOverview -> Gestion des commandes\nQuelle action souhaitez-vous réaliser ?")
+        print("1. Créer une nouvelle commande\n2. Afficher les commandes d'un client\n3. Télécherger CSV\n4. Quitter")
         choix = input("Entrez le numéro de votre choix -> ")
 
         if choix == '1':
-            manager_order.request_new_order(manager_customer,manager_dish)
-            pass
+            manager_order.request_new_order(manager_customer, manager_dish)
         elif choix == '2':
-            # Fonction du menu de suppression d'une commande
-            pass
+            manager_order.show_customer_orders(manager_customer)
         elif choix == '3':
-            # Fonction du menu de clôture d'une commande
-            pass
+            manager_order.download_orders_as_csv()
         elif choix == '4':
-            # Fonction du menu d'affichage des commandes
-            pass
-        elif choix == '5':
-            print(
-                "Option 'Plus d'informations' vous permet d'en savoir plus sur les fonctionnalités de gestion des commandes.")
-        elif choix == '6':
-            print("Retour à l'overview")
             break
         else:
-            print("Choix invalide. Veuillez entrer un numéro valide.")
+            print_invalid_choice()

@@ -1,6 +1,7 @@
 import json
 import uuid
 from datetime import datetime
+import csv
 
 
 class Order:
@@ -115,3 +116,54 @@ class OrderManager:
         new_order = self.create_order(selected_customer, dishes)
         self.save_to_file()
         print(f"Nouvelle commande créée :\n{new_order}")
+
+    def show_customer_orders(self, customer_manager):
+        # Utilisation de la méthode de sélection de client
+        selected_customer = customer_manager.choose_customer("voir les commandes")
+        if not selected_customer:
+            print("Aucun client sélectionné.")
+            return
+
+        # Filtrer et afficher les commandes pour le client sélectionné
+        customer_orders = [order for order in self.orders if order.customer.id == selected_customer.id]
+        if not customer_orders:
+            print(
+                f"Aucune commande trouvée pour le client {selected_customer.first_name} {selected_customer.last_name}.")
+            return
+
+        print(f"Commandes pour {selected_customer.first_name} {selected_customer.last_name}:")
+        for order in customer_orders:
+            print(order)
+
+    def download_orders_as_csv(self):
+        date_str = input("Entrez la date pour laquelle télécharger les commandes (format YYYY-MM-DD) : ")
+        try:
+            selected_date = datetime.strptime(date_str, '%Y-%m-%d').date()
+        except ValueError:
+            print("Format de date invalide.")
+            return
+
+        filtered_orders = [order for order in self.orders if order.created_at.date() == selected_date]
+
+        if not filtered_orders:
+            print("Aucune commande trouvée pour cette date.")
+            return
+
+        filename = f"orders_{date_str}.csv"
+        with open(filename, mode='w', newline='', encoding='utf-8') as file:
+            csv_writer = csv.writer(file)
+            headers = ['Order ID', 'Customer Name', 'Dishes', 'Total Price', 'Created At']
+            csv_writer.writerow(headers)
+
+            for order in filtered_orders:
+                # Collecter les informations de la commande
+                order_id = str(order.id)
+                customer_name = f"{order.customer.first_name} {order.customer.last_name}"
+                dishes = ', '.join([dish.name for dish in order.dishes])
+                total_price = sum(dish.price for dish in order.dishes)
+                created_at = order.created_at.strftime('%Y-%m-%d %H:%M:%S')
+
+                # Écrire la ligne dans le fichier CSV
+                csv_writer.writerow([order_id, customer_name, dishes, total_price, created_at])
+
+        print(f"Les commandes ont été téléchargées dans '{filename}'.")
