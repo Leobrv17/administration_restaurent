@@ -1,4 +1,6 @@
 import uuid
+import json
+
 
 class Order:
     def __init__(self, last_name, first_name, phone_number):
@@ -43,3 +45,26 @@ class OrderManager:
             self.orders.remove(order)
             return True
         return False
+
+    def save_to_file(self, filename='orders.json'):
+        with open(filename, 'w') as file:
+            orders_dict = []
+            for order in self.orders:
+                order_data = order.__dict__.copy()
+                order_data['id'] = str(order.id)  # Convertir UUID en chaîne de caractères
+                orders_dict.append(order_data)
+
+            json.dump(orders_dict, file)
+    def load_from_file(self, filename='orders.json'):
+        try:
+            with open(filename, 'r') as file:
+                orders_dict = json.load(file)
+                for order_data in orders_dict:
+                    # Reconstruire chaque commande à partir des données du dictionnaire
+                    order = Order(order_data['last_name'], order_data['first_name'], order_data['phone_number'])
+                    order.id = uuid.UUID(order_data['id'])  # Convertir la chaîne de caractères en objet UUID
+                    self.orders.append(order)
+        except FileNotFoundError:
+            print(f"Aucun fichier trouvé nommé '{filename}'. Aucune commande chargée.")
+        except json.JSONDecodeError:
+            print(f"Erreur de décodage JSON dans le fichier '{filename}'.")

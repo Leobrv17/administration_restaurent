@@ -6,6 +6,8 @@ from order import OrderManager
 
 def overview():
     print("Bienvenu dans votre menu pour gestion de commandes de votre restaurent")
+    manager = OrderManager()
+    manager.load_from_file()
     while True:
         print("Quelle action souhaitez-vous réaliser ?")
         print("1. Gestion clientèle")
@@ -18,7 +20,7 @@ def overview():
         choix = input("Entrez le numéro de votre choix -> ")
 
         if choix == '1':
-            menu_customer()
+            menu_customer(manager)
         elif choix == '2':
             menu_dish()
         elif choix == '3':
@@ -34,7 +36,7 @@ def overview():
             print("Choix invalide. Veuillez entrer un numéro valide.")
 
 
-def menu_customer():
+def menu_customer(manager):
     while True:
         print("Overview -> Gestion Clientèle")
         print("Quelle action souhaitez-vous réaliser ?")
@@ -48,7 +50,6 @@ def menu_customer():
         choix = input("Entrez le numéro de votre choix -> ")
 
         if choix == '1':
-            manager = OrderManager()
             print("Entre le nom du client")
             last_name = asking.get_str()
 
@@ -59,7 +60,7 @@ def menu_customer():
             phone_numb = asking.get_phone_numb()
 
             new_order = manager.create_order(last_name, first_name, phone_numb)
-            print(new_order)
+            manager.save_to_file()
 
             pass
         elif choix == '2':
