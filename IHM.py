@@ -1,13 +1,13 @@
 from datetime import datetime
 
 import asking
-from order import OrderManager
+from customer import CustomerManager
 
 
 def overview():
     print("Bienvenu dans votre menu pour gestion de commandes de votre restaurent")
-    manager = OrderManager()
-    manager.load_from_file()
+    manager_cust = CustomerManager()
+    manager_cust.load_from_file()
     while True:
         print("Quelle action souhaitez-vous réaliser ?")
         print("1. Gestion clientèle")
@@ -20,7 +20,7 @@ def overview():
         choix = input("Entrez le numéro de votre choix -> ")
 
         if choix == '1':
-            menu_customer(manager)
+            menu_customer(manager_cust)
         elif choix == '2':
             menu_dish()
         elif choix == '3':
@@ -50,24 +50,13 @@ def menu_customer(manager):
         choix = input("Entrez le numéro de votre choix -> ")
 
         if choix == '1':
-            print("Entre le nom du client")
-            last_name = asking.get_str()
-
-            print("Entre le prénom du client")
-            first_name = asking.get_str()
-
-            print("Entre le numéro de téléphone du client")
-            phone_numb = asking.get_phone_numb()
-
-            new_order = manager.create_order(last_name, first_name, phone_numb)
-            manager.save_to_file()
-
+            manager.request_new_customer()
             pass
         elif choix == '2':
-            # Fonction du menu de suppression de client
+            manager.request_and_delete_customer()
             pass
         elif choix == '3':
-            # Fonction du menu de modification d'un client
+            manager.request_and_update_customer()
             pass
         elif choix == '4':
             # Fonction du menu d'affichage de client existant
