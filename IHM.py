@@ -2,12 +2,15 @@ from datetime import datetime
 
 import asking
 from customer import CustomerManager
+from dish import DishManager
 
 
 def overview():
     print("Bienvenu dans votre menu pour gestion de commandes de votre restaurent")
     manager_cust = CustomerManager()
     manager_cust.load_from_file()
+    manager_dish = DishManager()
+    manager_dish.load_from_file()
     while True:
         print("Quelle action souhaitez-vous réaliser ?")
         print("1. Gestion clientèle")
@@ -59,7 +62,7 @@ def menu_customer(manager):
             manager.request_and_update_customer()
             pass
         elif choix == '4':
-            # Fonction du menu d'affichage de client existant
+            manager.request_and_show_customer()
             pass
         elif choix == '5':
             print(
