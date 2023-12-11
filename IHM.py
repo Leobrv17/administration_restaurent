@@ -32,10 +32,8 @@ def overview():
         elif choix == '3':
             menu_bill(manager_cust, manager_dish, manager_order)
         elif choix == '4':
-            get_bills_per_day_csv()
-        elif choix == '5':
             print("Option 'Plus d'informations' vous permet d'en savoir plus sur les fonctionnalités.")
-        elif choix == '6':
+        elif choix == '5':
             print("À demain.")
             break
         else:
@@ -117,9 +115,9 @@ def menu_bill(manager_customer, manager_dish, manager_order):
         print("Overview -> Gestion des commandes")
         print("Quelle action souhaitez-vous réaliser ?")
         print("1. Créer une nouvelle commande")
-        print("2. Supprimer une commande existante")
-        print("3. Clôturer une commande existante")
-        print("4. Afficher une commande existante")
+        print("2. Afficher les commande d'un client")
+        print("3. Afficher un facture")
+        print("4. Telecharger csv pour un date")
         print("5. Plus d'informations")
         print("6. Quitter")
 
@@ -145,21 +143,3 @@ def menu_bill(manager_customer, manager_dish, manager_order):
             break
         else:
             print("Choix invalide. Veuillez entrer un numéro valide.")
-
-
-def get_bills_per_day_csv():
-    while True:
-        date_str = input("Veuillez entrer une date au format YYYY-MM-DD : ")
-
-        try:
-            date_obj = datetime.strptime(date_str, "%Y-%m-%d")
-            print("Vous avez entré la date :", date_obj)
-
-            # Demander la confirmation de la date
-            confirmation = input("Confirmez-vous la date ? (O/N) : ").strip().lower()
-            if confirmation == 'o':
-                return date_obj
-            else:
-                print("Saisie annulée.")
-        except ValueError:
-            print("Format de date incorrect. Assurez-vous d'utiliser le format YYYY-MM-DD.")
