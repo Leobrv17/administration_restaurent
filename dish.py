@@ -1,5 +1,5 @@
-import uuid
 import json
+import uuid
 
 
 class Dish:
@@ -12,6 +12,21 @@ class Dish:
 
     def __str__(self):
         return f"Dish ID: {self.id}\nName: {self.name}\nDescription: {self.description}\nPrice: {self.price}\nCategory: {self.category}"
+
+    def to_dict(self):
+        return {
+            "id": str(self.id),
+            "name": self.name,
+            "description": self.description,
+            "price": self.price,
+            "category": self.category
+        }
+
+    @staticmethod
+    def from_dict(data):
+        dish = Dish(data['name'], data['description'], data['price'], data['category'])
+        dish.id = uuid.UUID(data['id'])
+        return dish
 
 
 class DishManager:
@@ -68,6 +83,18 @@ class DishManager:
     def find_dishes_by_name(self, name_fragment):
         return [dish for dish in self.dishes if name_fragment.lower() in dish.name.lower()]
 
+    def request_new_dish(self):
+        print("Entrez les détails du nouveau plat.")
+
+        name = input("Nom du plat : ")
+        description = input("Description : ")
+        price = float(input("Prix : "))
+        category = input("Catégorie : ")
+
+        new_dish = self.create_dish(name, description, price, category)
+        self.save_to_file()
+        print(f"Nouveau plat ajouté : \n{new_dish}")
+
     def choose_dish(self, action_description):
         name_fragment = input("Entrez un fragment du nom du plat : ").lower()
         matching_dishes = self.find_dishes_by_name(name_fragment)
@@ -104,12 +131,14 @@ class DishManager:
                              description=new_description if new_description else selected_dish.description,
                              price=new_price if new_price else selected_dish.price,
                              category=new_category if new_category else selected_dish.category)
+            self.save_to_file()
             print(f"Le plat {selected_dish.id} a été mis à jour.")
 
     def request_and_delete_dish(self):
         selected_dish = self.choose_dish("supprimer")
         if selected_dish:
             self.delete_dish(selected_dish.id)
+            self.save_to_file()
             print(f"Le plat {selected_dish.id} a été supprimé.")
 
     def request_and_show_dish(self):

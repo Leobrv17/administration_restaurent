@@ -25,7 +25,7 @@ def overview():
         if choix == '1':
             menu_customer(manager_cust)
         elif choix == '2':
-            menu_dish()
+            menu_dish(manager_dish)
         elif choix == '3':
             menu_bill()
         elif choix == '4':
@@ -74,7 +74,7 @@ def menu_customer(manager):
             print("Choix invalide. Veuillez entrer un numéro valide.")
 
 
-def menu_dish():
+def menu_dish(manager_dish):
     while True:
         print("Overview -> Gestion de la carte")
         print("Quelle action souhaitez-vous réaliser ?")
@@ -88,16 +88,16 @@ def menu_dish():
         choix = input("Entrez le numéro de votre choix -> ")
 
         if choix == '1':
-            # Fonction du menu de nouveau plat
+            manager_dish.request_new_dish()
             pass
         elif choix == '2':
-            # Fonction du menu de suppression de plat
+            manager_dish.request_and_delete_dish()
             pass
         elif choix == '3':
-            # Fonction du menu de modification d'un plat
+            manager_dish.request_and_update_dish()
             pass
         elif choix == '4':
-            # Fonction du menu d'affichage de plat existant
+            manager_dish.request_and_show_dish()
             pass
         elif choix == '5':
             print(
