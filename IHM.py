@@ -2,6 +2,7 @@ from datetime import datetime
 
 import asking
 from customer import CustomerManager
+from order import OrderManager
 from dish import DishManager
 
 
@@ -11,6 +12,8 @@ def overview():
     manager_cust.load_from_file()
     manager_dish = DishManager()
     manager_dish.load_from_file()
+    manager_order = OrderManager()
+    #manager_order.load_from_file()
     while True:
         print("Quelle action souhaitez-vous réaliser ?")
         print("1. Gestion clientèle")
@@ -27,7 +30,7 @@ def overview():
         elif choix == '2':
             menu_dish(manager_dish)
         elif choix == '3':
-            menu_bill()
+            menu_bill(manager_cust, manager_dish, manager_order)
         elif choix == '4':
             get_bills_per_day_csv()
         elif choix == '5':
@@ -109,7 +112,7 @@ def menu_dish(manager_dish):
             print("Choix invalide. Veuillez entrer un numéro valide.")
 
 
-def menu_bill():
+def menu_bill(manager_customer, manager_dish, manager_order):
     while True:
         print("Overview -> Gestion des commandes")
         print("Quelle action souhaitez-vous réaliser ?")
@@ -123,7 +126,7 @@ def menu_bill():
         choix = input("Entrez le numéro de votre choix -> ")
 
         if choix == '1':
-            # Fonction du menu de création d'une nouvelle commande
+            manager_order.request_new_order(manager_customer,manager_dish)
             pass
         elif choix == '2':
             # Fonction du menu de suppression d'une commande
