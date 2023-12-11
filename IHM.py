@@ -1,10 +1,11 @@
 from datetime import datetime
 
-def start_app():
-    print("Bienvenue dans votre application de gestion pour votre restaurant.")
-    overview()
+import asking
+from order import OrderManager
+
 
 def overview():
+    print("Bienvenu dans votre menu pour gestion de commandes de votre restaurent")
     while True:
         print("Quelle action souhaitez-vous réaliser ?")
         print("1. Gestion clientèle")
@@ -32,6 +33,7 @@ def overview():
         else:
             print("Choix invalide. Veuillez entrer un numéro valide.")
 
+
 def menu_customer():
     while True:
         print("Overview -> Gestion Clientèle")
@@ -46,7 +48,19 @@ def menu_customer():
         choix = input("Entrez le numéro de votre choix -> ")
 
         if choix == '1':
-            # Fonction du menu de nouveau client
+            manager = OrderManager()
+            print("Entre le nom du client")
+            last_name = asking.get_str()
+
+            print("Entre le prénom du client")
+            first_name = asking.get_str()
+
+            print("Entre le numéro de téléphone du client")
+            phone_numb = asking.get_phone_numb()
+
+            new_order = manager.create_order(last_name, first_name, phone_numb)
+            print(new_order)
+
             pass
         elif choix == '2':
             # Fonction du menu de suppression de client
@@ -58,12 +72,14 @@ def menu_customer():
             # Fonction du menu d'affichage de client existant
             pass
         elif choix == '5':
-            print("Option 'Plus d'informations' vous permet d'en savoir plus sur les fonctionnalités de gestion clientèle.")
+            print(
+                "Option 'Plus d'informations' vous permet d'en savoir plus sur les fonctionnalités de gestion clientèle.")
         elif choix == '6':
             print("Retour à l'overview")
             break
         else:
             print("Choix invalide. Veuillez entrer un numéro valide.")
+
 
 def menu_dish():
     while True:
@@ -91,12 +107,14 @@ def menu_dish():
             # Fonction du menu d'affichage de plat existant
             pass
         elif choix == '5':
-            print("Option 'Plus d'informations' vous permet d'en savoir plus sur les fonctionnalités de gestion de la carte.")
+            print(
+                "Option 'Plus d'informations' vous permet d'en savoir plus sur les fonctionnalités de gestion de la carte.")
         elif choix == '6':
             print("Retour à l'overview")
             break
         else:
             print("Choix invalide. Veuillez entrer un numéro valide.")
+
 
 def menu_bill():
     while True:
@@ -124,12 +142,14 @@ def menu_bill():
             # Fonction du menu d'affichage des commandes
             pass
         elif choix == '5':
-            print("Option 'Plus d'informations' vous permet d'en savoir plus sur les fonctionnalités de gestion des commandes.")
+            print(
+                "Option 'Plus d'informations' vous permet d'en savoir plus sur les fonctionnalités de gestion des commandes.")
         elif choix == '6':
             print("Retour à l'overview")
             break
         else:
             print("Choix invalide. Veuillez entrer un numéro valide.")
+
 
 def get_bills_per_day_csv():
     while True:
