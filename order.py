@@ -1,14 +1,17 @@
+from datetime import datetime
 import uuid
 
 class Order:
-    def __init__(self, customer, dishes=None):
+    def __init__(self, customer, dishes):
         self.id = uuid.uuid4()
-        self.customer = customer
-        self.dishes = dishes if dishes is not None else []
+        self.customer = customer  # Suppose que customer est un objet Customer
+        self.dishes = dishes  # Liste d'objets Dish
+        self.created_at = datetime.now()
 
     def __str__(self):
-        dishes_str = ', '.join([dish.name for dish in self.dishes])
-        return f"Order ID: {self.id}\nCustomer: {self.customer.last_name}, {self.customer.first_name}\nDishes: {dishes_str}"
+        dishes_str = ', '.join(dish.name for dish in self.dishes)
+        return (f"Order ID: {self.id}\nCustomer: {self.customer.first_name} {self.customer.last_name}\n"
+                f"Dishes: {dishes_str}\nCreated At: {self.created_at.strftime('%Y-%m-%d %H:%M:%S')}")
 
 class OrderManager:
     def __init__(self):
