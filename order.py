@@ -1,3 +1,4 @@
+import json
 import uuid
 from datetime import datetime
 
@@ -51,6 +52,35 @@ class OrderManager:
         for order in self.orders:
             print(order)
 
+    def save_to_file(self, filename='orders.json'):
+        with open(filename, 'w') as file:
+            orders_data = []
+            for order in self.orders:
+                order_data = {
+                    "id": str(order.id),
+                    "customer_id": str(order.customer.id),
+                    "dishes_ids": [str(dish.id) for dish in order.dishes],
+                    "created_at": order.created_at.strftime('%Y-%m-%d %H:%M:%S')
+                }
+                orders_data.append(order_data)
+            json.dump(orders_data, file)
+
+    def load_from_file(self, customer_manager, dish_manager, filename='orders.json'):
+        try:
+            with open(filename, 'r') as file:
+                orders_data = json.load(file)
+                for data in orders_data:
+                    customer = customer_manager.read_customer(uuid.UUID(data['customer_id']))
+                    dishes = [dish_manager.read_dish(uuid.UUID(dish_id)) for dish_id in data['dishes_ids']]
+                    order = Order(customer, dishes)
+                    order.id = uuid.UUID(data['id'])
+                    order.created_at = datetime.strptime(data['created_at'], '%Y-%m-%d %H:%M:%S')
+                    self.orders.append(order)
+        except FileNotFoundError:
+            print(f"Aucun fichier trouvé nommé '{filename}'. Aucune commande chargée.")
+        except json.JSONDecodeError:
+            print(f"Erreur de décodage JSON dans le fichier '{filename}'.")
+
     def request_new_order(self, customer_manager, dish_manager):
         # Sélection du client
         print("Sélectionnez un client pour la commande.")
@@ -83,4 +113,5 @@ class OrderManager:
 
         # Création de la commande
         new_order = self.create_order(selected_customer, dishes)
+        self.save_to_file()
         print(f"Nouvelle commande créée :\n{new_order}")

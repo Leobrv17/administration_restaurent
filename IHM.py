@@ -13,7 +13,7 @@ def overview():
     manager_dish = DishManager()
     manager_dish.load_from_file()
     manager_order = OrderManager()
-    #manager_order.load_from_file()
+    manager_order.load_from_file(manager_cust,manager_dish)
     while True:
         print("Quelle action souhaitez-vous réaliser ?")
         print("1. Gestion clientèle")
